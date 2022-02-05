@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models.user import User
+from techowiz.models.user import User
 
 
 class RegisterSerializer(serializers.Serializer):

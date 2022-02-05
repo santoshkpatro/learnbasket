@@ -1,8 +1,8 @@
 from django.db import models
-from core.models.base import BaseModel
-from core.models.program import Program
-from core.models.user import User
-from core.models.coupon import Coupon
+from techowiz.models.base import BaseModel
+from techowiz.models.program import Program
+from techowiz.models.user import User
+from techowiz.models.coupon import Coupon
 
 
 class Order(BaseModel):

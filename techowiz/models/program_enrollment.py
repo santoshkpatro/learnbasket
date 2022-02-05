@@ -1,7 +1,7 @@
 from django.db import models
-from core.models.base import BaseModel
-from core.models.user import User
-from core.models.program import Program
+from techowiz.models.base import BaseModel
+from techowiz.models.user import User
+from techowiz.models.program import Program
 
 
 class ProgramEnrollment(BaseModel):

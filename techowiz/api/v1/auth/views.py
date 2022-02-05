@@ -7,8 +7,8 @@ from rest_framework import status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
-from api.v1.auth.serializers import LoginSerializer, PasswordResetSerializer, RegisterSerializer, ProfileSerializer
-from core.models.user import User
+from techowiz.api.v1.auth.serializers import LoginSerializer, PasswordResetSerializer, RegisterSerializer, ProfileSerializer
+from techowiz.models.user import User
 
 
 class RegisterView(APIView):

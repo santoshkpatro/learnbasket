@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'core.apps.CoreConfig',
+    'techowiz.apps.TechowizConfig',
 ]
 
 MIDDLEWARE = [
@@ -96,7 +96,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom default User
-AUTH_USER_MODEL = 'core.User'
+AUTH_USER_MODEL = 'techowiz.User'
 
 # DRF CONFIG
 REST_FRAMEWORK = {

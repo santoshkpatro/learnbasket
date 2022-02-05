@@ -1,6 +1,11 @@
 from django.db import models
-from core.models.base import BaseModel
-from core.models.category import Category
+from techowiz.models.base import BaseModel
+from techowiz.models.category import Category
+
+
+class AvailableProgramManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True, is_public=True)
 
 
 class Program(BaseModel):
@@ -32,6 +37,9 @@ class Program(BaseModel):
     is_free = models.BooleanField(default=False)
     is_public = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    objects = models.Manager()
+    available_objects = AvailableProgramManager()
 
     class Meta:
         db_table = 'programs'

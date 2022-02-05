@@ -1,6 +1,6 @@
 from django.db import models
-from core.models.base import BaseModel
-from core.models.order import Order
+from techowiz.models.base import BaseModel
+from techowiz.models.order import Order
 
 
 class BillingAddress(BaseModel):

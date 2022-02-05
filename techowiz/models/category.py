@@ -1,5 +1,5 @@
 from django.db import models
-from core.models.base import BaseModel
+from techowiz.models.base import BaseModel
 
 
 class Category(BaseModel):

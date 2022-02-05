@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from core.models.base import BaseModel
+from techowiz.models.base import BaseModel
 
 
 class UserManager(BaseUserManager):

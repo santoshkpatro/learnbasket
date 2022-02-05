@@ -1,6 +1,6 @@
 from django.db import models
-from core.models.base import BaseModel
-from core.models.program import Program
+from techowiz.models.base import BaseModel
+from techowiz.models.program import Program
 
 
 class Lesson(BaseModel):
