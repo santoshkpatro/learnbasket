@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from techowiz.models.user import User
 from techowiz.models.program import Program
 from techowiz.models.program_enrollment import ProgramEnrollment
+from techowiz.models.coupon import Coupon
 
 
 class ProgramEnrolledInline(admin.StackedInline):
@@ -97,4 +98,14 @@ class ProgramAdmin(admin.ModelAdmin):
         'is_free',
         'is_public',
         'is_active',
+    ]
+
+
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = [
+        'coupon_code',
+        'discount_percentage',
+        'is_active',
+        'show_at_checkout'
     ]

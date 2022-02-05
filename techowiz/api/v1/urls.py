@@ -1,6 +1,8 @@
 from django.urls import path
 from techowiz.api.v1.auth.views import LoginView, PasswordResetView, EmailVerifyView, RegisterView, ProfileDetailView
 from techowiz.api.v1.programs.views import ProgramListView, ProgramDetailView, ProgramEnrolledView
+from techowiz.api.v1.orders.views import OrderCreateView
+
 
 urlpatterns = [
     path('auth/register/', RegisterView.as_view()),                             # POST - /auth/register/
@@ -12,4 +14,8 @@ urlpatterns = [
     path('programs/', ProgramListView.as_view()),                               # GET - /programs/
     path('programs/<uuid:pk>/', ProgramDetailView.as_view()),                   # GET - /programs/:pk/
     path('programs/enrolled/', ProgramEnrolledView.as_view()),                  # GET - /programs/enrolled/
+
+    path('orders/create/', OrderCreateView.as_view()),                          # GET - /orders/create/?program_id=&coupon_code=
+    # path('orders/'),                                                          # GET - /orders/
+    # path('orders/<str:order_id>/process/'),                                   # POST - /orders/:order_id/process/
 ]
