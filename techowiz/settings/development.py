@@ -1,5 +1,10 @@
+import os
 from techowiz.settings.base import *
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# Load credntials from .env
+load_dotenv()
 
 # REST FRAMEWORK SIMPLEJWT CONFIG
 SIMPLE_JWT = {
@@ -36,3 +41,9 @@ SIMPLE_JWT = {
 
 # Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# RAZORPAY
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET')
+
+# STRIPE

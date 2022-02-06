@@ -5,6 +5,11 @@ from techowiz.models.user import User
 from techowiz.models.coupon import Coupon
 
 
+class UserOrderManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().exclude(status=0)
+
+
 class Order(BaseModel):
     ORDER_STATUS_CHOICES = (
         (0, 'INITIATED'),
@@ -41,8 +46,11 @@ class Order(BaseModel):
     transaction_id = models.CharField(max_length=35, blank=True, null=True)
     payment_id = models.CharField(max_length=35, blank=True, null=True)
 
+    objects = models.Manager()
+    user_objects = UserOrderManager()
+
     class Meta:
         db_table = 'orders'
 
     def __str__(self) -> str:
-        return self.order_number
+        return self.order_id
