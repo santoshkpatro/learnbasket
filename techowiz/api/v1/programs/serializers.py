@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from techowiz.models.program import Program
+from techowiz.models.lesson import Lesson
+
 
 
 class ProgramSerializer(serializers.ModelSerializer):
@@ -43,3 +45,17 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
         queryset = obj.parent_programs.filter(is_active=True)
         serializer = ProgramDetailSerializer(queryset, many=True)
         return serializer.data
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = [
+            'sl',
+            'title',
+            'description',
+            'is_complete',
+            'resource',
+            'assignment',
+            'video_src'
+        ]

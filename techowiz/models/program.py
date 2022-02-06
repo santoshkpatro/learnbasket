@@ -45,4 +45,4 @@ class Program(BaseModel):
         db_table = 'programs'
 
     def __str__(self) -> str:
-        return self.slug
+        return self.title

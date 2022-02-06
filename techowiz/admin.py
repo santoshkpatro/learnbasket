@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from techowiz.models.lesson import Lesson
 from techowiz.models.user import User
 from techowiz.models.program import Program
 from techowiz.models.program_enrollment import ProgramEnrollment
@@ -90,6 +91,11 @@ admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
 
 
+class LessonInline(admin.StackedInline):
+    model = Lesson
+    extra = 1
+
+
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
     list_display = [
@@ -99,6 +105,7 @@ class ProgramAdmin(admin.ModelAdmin):
         'is_public',
         'is_active',
     ]
+    inlines = [LessonInline]
 
 
 @admin.register(Coupon)

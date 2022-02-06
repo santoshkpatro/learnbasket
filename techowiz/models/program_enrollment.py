@@ -20,3 +20,6 @@ class ProgramEnrollment(BaseModel):
     class Meta:
         db_table = 'program_enrollments'
         unique_together = ['user', 'program']
+
+    def __str__(self) -> str:
+        return str(self.id)
