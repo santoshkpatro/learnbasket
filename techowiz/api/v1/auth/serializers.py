@@ -31,5 +31,5 @@ class ProfileSerializer(serializers.ModelSerializer):
             'last_name',
             'avatar',
             'gender',
-            'date_of_birth'
+            'date_of_birth',
         ]

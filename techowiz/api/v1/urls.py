@@ -1,11 +1,12 @@
 import os
 from django.urls import path
-from techowiz.api.v1.auth.views import LoginView, PasswordResetView, EmailVerifyView, RegisterView, ProfileDetailView
+from techowiz.api.v1.auth.views import LoginView, PasswordResetView, EmailVerifyView, RegisterView, ProfileDetailView, StatusView
 from techowiz.api.v1.programs.views import ProgramListView, ProgramDetailView, ProgramEnrolledView, LessonListView
 from techowiz.api.v1.orders.views import OrderCreateView, OrderProcessView, payment_view, OrderListView
 
 
 urlpatterns = [
+    path('auth/status/', StatusView.as_view()),                                 # GET - v1/auth/status/
     path('auth/register/', RegisterView.as_view()),                             # POST - v1/auth/register/
     path('auth/login/', LoginView.as_view()),                                   # POST - v1/auth/login/
     path('auth/verify/', EmailVerifyView.as_view()),                            # GET - v1/auth/verify/?verify_token=

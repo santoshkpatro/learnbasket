@@ -11,6 +11,14 @@ from techowiz.api.v1.auth.serializers import LoginSerializer, PasswordResetSeria
 from techowiz.models.user import User
 
 
+class StatusView(APIView):    
+    def get(self, request):
+        if request.user and request.user.is_authenticated:
+            return Response(data={'detail': 'Logged in'}, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'detail': 'Expired or logged out'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
 class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)

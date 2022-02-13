@@ -46,6 +46,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET')
 
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True
+
 # CELERY
 # CELERY_RESULT_BACKEND = 'redis://localhost'
 # CELERY_BROKER = 'redis://localhost'
