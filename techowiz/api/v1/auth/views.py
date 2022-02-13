@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.conf import settings
 from django.core.mail import send_mail
+from django.template.loader import get_template, render_to_string
 from rest_framework import status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -44,8 +45,13 @@ class RegisterView(APIView):
                     algorithm="HS256"
                 )
 
+                message = render_to_string('verification_mail.html', {
+                    'user': user,
+                    'url': f'{settings.FRONTEND_BASE_URL}/auth/email_verify?verify_token={encoded_jwt}' 
+                })
+
                 # Send the encoded token in email
-                send_mail('Email activation', f'Email activation link - {encoded_jwt}', 'support@techowiz.com', [user.email], fail_silently=True)
+                send_mail('Welcome to Techowiz', message, 'support@techowiz.com', [user.email], fail_silently=True)
 
                 return Response(data={'detail': 'Account created'}, status=status.HTTP_201_CREATED)
         else:

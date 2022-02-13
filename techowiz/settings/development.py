@@ -52,3 +52,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CELERY
 # CELERY_RESULT_BACKEND = 'redis://localhost'
 # CELERY_BROKER = 'redis://localhost'
+
+# FRONTEND DETAILS
+FRONTEND_BASE_URL = os.environ.get('FRONTEND_BASE_URL', 'http:127.0.0.1:3000')

@@ -42,7 +42,9 @@ ROOT_URLCONF = 'techowiz.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'techowiz/api/v1/auth/templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
