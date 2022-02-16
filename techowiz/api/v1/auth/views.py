@@ -1,4 +1,6 @@
+import json
 import jwt
+import requests
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.conf import settings
@@ -133,7 +135,12 @@ class PasswordResetView(APIView):
                 algorithm="HS256"
             )
             # Send password reset email
-            send_mail('Password Reset Email', f'Password reset token - {encoded_jwt}', 'support@techowiz.com', [user.email], fail_silently=True)
+            message = render_to_string('password_reset_email', {
+                'user': user,
+                'url': f'{settings.FRONTEND_BASE_URL}/auth/password_reset/?reset_token={encoded_jwt}'
+            })
+
+            send_mail('Password Reset Email', message, 'noreply@techowiz.in', [user.email], fail_silently=True)
             return Response(data={'detail': 'Password reset email has been sent'}, status=status.HTTP_201_CREATED)
 
         except User.DoesNotExist:
@@ -175,3 +182,43 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         user = self.request.user
         return user
+
+
+class GoogleCallbackView(APIView):
+    def get(self, request):
+        code = request.query_params.get('code', None)
+        
+        if not code:
+            return Response(data={'detail': 'Please provide authorization code'}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = {
+            'code': code,
+            'client_id': settings.GOOGLE_CLIENT_ID,
+            'client_secret': settings.GOOGLE_CLIENT_SECRET,
+            'redirect_uri': settings.GOOGLE_REDIRECT_URI,
+            'grant_type': 'authorization_code'
+        }
+
+        token_response = requests.post(settings.GOOGLE_TOKEN_URL, data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
+
+        if not token_response.status_code == status.HTTP_200_OK:
+            return Response(data={'detail': 'Unable to fetch details from google server'}, status=status.HTTP_400_BAD_REQUEST)
+
+        token_response_data = token_response.json()
+        access_token = token_response_data.get('access_token')
+        
+        profile_response = requests.get(settings.GOOGLE_PROFILE_URL, params={'access_token': access_token})
+
+        if not profile_response.status_code == status.HTTP_200_OK:
+            return Response(data={'detail': 'Unable to contact google server'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        profile_data = profile_response.json()
+
+        try:
+            User.objects.get(email=profile_data['email'])
+            return Response(data={'detail': 'Account already exists'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        except User.DoesNotExist:
+            user = User(email=profile_data['email'], google_id=profile_data['id'], first_name=profile_data['given_name'], last_name=profile_data['family_name'])
+            user.save()
+            # Send a welcome message
+            return Response(data={'detail': 'Signed up with google success'}, status=status.HTTP_200_OK)

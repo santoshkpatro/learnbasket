@@ -1,6 +1,6 @@
 import os
 from django.urls import path
-from techowiz.api.v1.auth.views import LoginView, PasswordResetView, EmailVerifyView, RegisterView, ProfileDetailView, StatusView
+from techowiz.api.v1.auth.views import LoginView, PasswordResetView, EmailVerifyView, RegisterView, ProfileDetailView, StatusView, GoogleCallbackView
 from techowiz.api.v1.programs.views import ProgramListView, ProgramDetailView, ProgramEnrolledView, LessonListView
 from techowiz.api.v1.orders.views import OrderCreateView, OrderProcessView, payment_view, OrderListView
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('auth/verify/', EmailVerifyView.as_view()),                            # GET - v1/auth/verify/?verify_token=
     path('auth/password_reset/', PasswordResetView.as_view()),                  # GET, POST, PUT - v1/auth/password_reset/?reset_token=
     path('auth/profile/', ProfileDetailView.as_view()),                         # GET, PUT - v1/auth/profile/
+    path('auth/oauth/google/callback', GoogleCallbackView.as_view()),           # GET - v1/auth/oauth/google/callback/?code=&type=login, register
 
     path('orders/', OrderListView.as_view()),                                   # GET - v1/orders/
     path('orders/create/', OrderCreateView.as_view()),                          # GET - v1/orders/create/?program_id=&coupon_code=

@@ -55,3 +55,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # FRONTEND DETAILS
 FRONTEND_BASE_URL = os.environ.get('FRONTEND_BASE_URL', 'http:127.0.0.1:3000')
+
+# GOOGLE OAUTH
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
+GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
+GOOGLE_TOKEN_URL = os.environ.get('GOOGLE_TOKEN_URL', 'https://oauth2.googleapis.com/token')
+GOOGLE_PROFILE_URL = os.environ.get('GOOGLE_PROFILE_URL', 'https://www.googleapis.com/oauth2/v2/userinfo')
