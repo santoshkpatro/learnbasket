@@ -1,11 +1,10 @@
-import json
 import jwt
 import requests
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.conf import settings
 from django.core.mail import send_mail
-from django.template.loader import get_template, render_to_string
+from django.template.loader import render_to_string
 from rest_framework import status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -186,10 +185,13 @@ class ProfileDetailView(generics.RetrieveUpdateAPIView):
 
 class GoogleCallbackView(APIView):
     def get(self, request):
+        mode = request.query_params.get('mode', None)
+        if not mode or mode not in ['login', 'register']:
+            return Response(data={'detail': 'Please provide valid mode'}, status=status.HTTP_404_NOT_FOUND)
+
         code = request.query_params.get('code', None)
-        
         if not code:
-            return Response(data={'detail': 'Please provide authorization code'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'detail': 'Please provide authorization code'}, status=status.HTTP_404_NOT_FOUND)
 
         data = {
             'code': code,
@@ -214,11 +216,32 @@ class GoogleCallbackView(APIView):
 
         profile_data = profile_response.json()
 
-        try:
-            User.objects.get(email=profile_data['email'])
-            return Response(data={'detail': 'Account already exists'}, status=status.HTTP_406_NOT_ACCEPTABLE)
-        except User.DoesNotExist:
-            user = User(email=profile_data['email'], google_id=profile_data['id'], first_name=profile_data['given_name'], last_name=profile_data['family_name'])
-            user.save()
-            # Send a welcome message
-            return Response(data={'detail': 'Signed up with google success'}, status=status.HTTP_200_OK)
+        if mode == 'register':
+            try:
+                existing_user = User.objects.get(email=profile_data['email'])
+                if not existing_user.google_id:
+                    existing_user.google_id = profile_data['google_id']
+                    existing_user.save()
+                    return Response(data={'detail': 'Google account connected'}, status=status.HTTP_200_OK)
+
+                return Response(data={'detail': 'Account already exists'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            except User.DoesNotExist:
+                user = User(email=profile_data['email'], google_id=profile_data['id'], first_name=profile_data['given_name'], last_name=profile_data['family_name'])
+                user.save()
+                # Send a welcome message
+                return Response(data={'detail': 'Signed up with google success'}, status=status.HTTP_200_OK)
+        elif mode == 'login':
+            try:
+                user = User.objects.get(email=profile_data['email'])
+                if not user.google_id:
+                    user.google_id = profile_data['id']
+                    user.save()
+
+                login_access_token = AccessToken.for_user(user)
+                login_refresh_token = RefreshToken.for_user(user)
+
+                return Response(data={'access_token': str(login_access_token), 'refresh_token': str(login_refresh_token)}, status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                return Response(data={'detail': 'No account found'}, status=status.HTTP_404_NOT_FOUND)
+
+
