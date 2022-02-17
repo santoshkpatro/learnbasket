@@ -12,7 +12,7 @@ urlpatterns = [
     path('auth/verify/', EmailVerifyView.as_view()),                            # GET - v1/auth/verify/?verify_token=
     path('auth/password_reset/', PasswordResetView.as_view()),                  # GET, POST, PUT - v1/auth/password_reset/?reset_token=
     path('auth/profile/', ProfileDetailView.as_view()),                         # GET, PUT - v1/auth/profile/
-    path('auth/oauth/google/callback', GoogleCallbackView.as_view()),           # GET - v1/auth/oauth/google/callback/?code=&type=login, register
+    path('auth/oauth/google/callback/', GoogleCallbackView.as_view()),          # GET - v1/auth/oauth/google/callback/?code=&type=login, register
 
     path('orders/', OrderListView.as_view()),                                   # GET - v1/orders/
     path('orders/create/', OrderCreateView.as_view()),                          # GET - v1/orders/create/?program_id=&coupon_code=

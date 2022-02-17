@@ -18,7 +18,7 @@ export default {
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <router-link class="navbar-brand" :to="{ name: 'Home' }">Techowiz</router-link>
+            <router-link class="navbar-brand" :to="{ name: 'Home' }">Learn Basket</router-link>
             <button
                 class="navbar-toggler"
                 type="button"
