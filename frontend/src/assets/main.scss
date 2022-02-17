@@ -1,0 +1,54 @@
+@import '../../node_modules/bootstrap/scss/bootstrap';
+
+// $body-bg: #000;
+
+// $body-color: #111;
+// $navbar-light-color: #212529;
+// $navbar-light-hover-color: #6610f2;
+// $navbar-light-active-color: #6610f2;
+
+$btn-padding-y: $input-btn-padding-y;
+$btn-padding-x: $input-btn-padding-x;
+$btn-font-family: $input-btn-font-family;
+$btn-font-size: $input-btn-font-size;
+$btn-line-height: $input-btn-line-height;
+$btn-white-space: null; // Set to `nowrap` to prevent text wrapping
+
+$btn-padding-y-sm: $input-btn-padding-y-sm;
+$btn-padding-x-sm: $input-btn-padding-x-sm;
+$btn-font-size-sm: $input-btn-font-size-sm;
+
+$btn-padding-y-lg: $input-btn-padding-y-lg;
+$btn-padding-x-lg: $input-btn-padding-x-lg;
+$btn-font-size-lg: $input-btn-font-size-lg;
+
+$btn-border-width: $input-btn-border-width;
+
+$btn-font-weight: $font-weight-normal;
+$btn-box-shadow: unset;
+$btn-focus-width: 0;
+$btn-focus-box-shadow: none;
+$btn-disabled-opacity: 0.65;
+$btn-active-box-shadow: none;
+
+$btn-link-color: $link-color;
+$btn-link-hover-color: $link-hover-color;
+$btn-link-disabled-color: $gray-600;
+
+// Allows for customizing button radius independently from global border radius
+$btn-border-radius: $border-radius;
+$btn-border-radius-sm: $border-radius-sm;
+$btn-border-radius-lg: $border-radius-lg;
+
+$btn-transition: none;
+
+$btn-hover-bg-shade-amount: 15%;
+$btn-hover-bg-tint-amount: 15%;
+$btn-hover-border-shade-amount: 20%;
+$btn-hover-border-tint-amount: 10%;
+$btn-active-bg-shade-amount: 0%;
+$btn-active-bg-tint-amount: 0%;
+$btn-active-border-shade-amount: 0%;
+$btn-active-border-tint-amount: 0%;
+
+@import '../../node_modules/bootstrap/scss/bootstrap';
