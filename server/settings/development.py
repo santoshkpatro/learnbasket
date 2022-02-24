@@ -62,3 +62,6 @@ GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
 GOOGLE_TOKEN_URL = os.environ.get('GOOGLE_TOKEN_URL', 'https://oauth2.googleapis.com/token')
 GOOGLE_PROFILE_URL = os.environ.get('GOOGLE_PROFILE_URL', 'https://www.googleapis.com/oauth2/v2/userinfo')
+
+# CELERY SETUP
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')

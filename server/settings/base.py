@@ -106,3 +106,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
+
+# CELERY SETTINGS (COMMON)
+CELERY_IMPORTS = [
+    'server.api.v1.auth.tasks'
+]

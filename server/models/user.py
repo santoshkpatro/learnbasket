@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from server.models.base import BaseModel
+from celery import shared_task
 
 
 class UserManager(BaseUserManager):

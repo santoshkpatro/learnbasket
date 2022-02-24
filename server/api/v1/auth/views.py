@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 from server.api.v1.auth.serializers import LoginSerializer, PasswordResetSerializer, RegisterSerializer, ProfileSerializer
 from server.models.user import User
+from server.api.v1.auth import tasks
 
 
 class StatusView(APIView):    
@@ -45,14 +46,10 @@ class RegisterView(APIView):
                     settings.SECRET_KEY,
                     algorithm="HS256"
                 )
+                verify_url = '{url}/auth/email_verify?verify_token={encoded_jwt}'.format(url=settings.FRONTEND_BASE_URL, encoded_jwt=encoded_jwt)
 
-                message = render_to_string('verification_mail.html', {
-                    'user': user,
-                    'url': f'{settings.FRONTEND_BASE_URL}/auth/email_verify?verify_token={encoded_jwt}' 
-                })
-
-                # Send the encoded token in email
-                send_mail('Welcome to Techowiz', message, 'support@server.com', [user.email], fail_silently=True)
+                # Sending email as an async task.
+                tasks.send_verification_email.delay(user_data=serializer.data, verify_url=verify_url)
 
                 return Response(data={'detail': 'Account created'}, status=status.HTTP_201_CREATED)
         else:
@@ -71,6 +68,8 @@ class EmailVerifyView(APIView):
                 user = User.objects.get(email=email)
                 user.is_email_verified = True
                 user.save()
+                serializer = ProfileSerializer(user)
+                tasks.send_welcome_email.delay(serializer.data)
                 return Response(data={'detail': 'User verified'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response(data={'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
