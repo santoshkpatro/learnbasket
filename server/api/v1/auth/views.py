@@ -3,8 +3,6 @@ import requests
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.conf import settings
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from rest_framework import status, generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -46,7 +44,7 @@ class RegisterView(APIView):
                     settings.SECRET_KEY,
                     algorithm="HS256"
                 )
-                verify_url = '{url}/auth/email_verify?verify_token={encoded_jwt}'.format(url=settings.FRONTEND_BASE_URL, encoded_jwt=encoded_jwt)
+                verify_url = '{base_url}/auth/email_verify?verify_token={encoded_jwt}'.format(base_url=settings.FRONTEND_BASE_URL, encoded_jwt=encoded_jwt)
 
                 # Sending email as an async task.
                 tasks.send_verification_email.delay(user_data=serializer.data, verify_url=verify_url)
@@ -69,7 +67,10 @@ class EmailVerifyView(APIView):
                 user.is_email_verified = True
                 user.save()
                 serializer = ProfileSerializer(user)
+
+                # Sending welcome email
                 tasks.send_welcome_email.delay(serializer.data)
+                
                 return Response(data={'detail': 'User verified'}, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 return Response(data={'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -132,13 +133,12 @@ class PasswordResetView(APIView):
                 settings.SECRET_KEY,
                 algorithm="HS256"
             )
-            # Send password reset email
-            message = render_to_string('password_reset_email', {
-                'user': user,
-                'url': f'{settings.FRONTEND_BASE_URL}/auth/password_reset/?reset_token={encoded_jwt}'
-            })
+            reset_url = '{base_url}/auth/password_reset/?reset_token={encoded_jwt}'.format(base_url=settings.FRONTEND_BASE_URL, encoded_jwt=encoded_jwt)
+            serializer = ProfileSerializer(user)
+            
+            # Send password reset email (Async)
+            tasks.send_password_reset_email.delay(user_data=serializer.data, reset_url=reset_url)
 
-            send_mail('Password Reset Email', message, 'noreply@server.in', [user.email], fail_silently=True)
             return Response(data={'detail': 'Password reset email has been sent'}, status=status.HTTP_201_CREATED)
 
         except User.DoesNotExist:
@@ -227,7 +227,11 @@ class GoogleCallbackView(APIView):
             except User.DoesNotExist:
                 user = User(email=profile_data['email'], google_id=profile_data['id'], first_name=profile_data['given_name'], last_name=profile_data['family_name'])
                 user.save()
+                serializer = ProfileSerializer(user)
+
                 # Send a welcome message
+                tasks.send_welcome_email.delay(user_data=serializer.data)
+
                 return Response(data={'detail': 'Signed up with google success'}, status=status.HTTP_200_OK)
         elif mode == 'login':
             try:
