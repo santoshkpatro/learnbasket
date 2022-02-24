@@ -5,17 +5,16 @@ from server.models.program import Program
 
 
 class ProgramEnrollment(BaseModel):
-    user = models.ForeignKey(
-        User, 
-        on_delete=models.CASCADE, 
-        related_name='user_enrollments'
+    ROLE_CHOICES = (
+        (0, 'student'),
+        (1, 'instructor'),
+        (2, 'maintainer'),
     )
-    program = models.ForeignKey(
-        Program, 
-        on_delete=models.CASCADE, 
-        related_name='program_enrollments'
-    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_enrollments')
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program_enrollments')
     is_active = models.BooleanField(default=True)
+    role = models.IntegerField(default=0, choices=ROLE_CHOICES)
 
     class Meta:
         db_table = 'program_enrollments'
